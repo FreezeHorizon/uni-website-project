@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="HTML, CSS" />
+    <title>Kings Gambit</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="overlay">
+        <h1><img src="Title.png" alt="Banner" /></h1>
+        <button id="playButton" onclick="showSides()">PLAY</button>
+        <p id="message"></p>
+      </div>
+    </div>
+    <div id="sidesContainer" style="display: none">
+      <p id="choose-side">Choose a side:</p>
+      <div class="side-container">
+        <div
+          class="side evil"
+          onmouseover="changeBackgroundColor('bg website/black_side.jpg')"
+        >
+          <a href="ExportedGame\Black.html" class="side evil">
+            <img src="bg website/black_statue.png" alt="Evil" />
+          </a>
+        </div>
+        <div
+          class="side good"
+          onmouseover="changeBackgroundColor('bg website/White_side.jpg')"
+        >
+          <a href="ExportedGame\White.html" class="side good">
+            <img src="bg website/white_statue.png" alt="Good" />
+          </a>
+        </div>
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>

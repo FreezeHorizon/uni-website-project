@@ -1,0 +1,109 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url("bg website/Board_Blank.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  color: #fff;
+  opacity: 1;
+  transition: background-image 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 50px;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+h1 img {
+  height: 200px;
+  width: auto;
+  max-width: 100%;
+}
+
+p {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.side-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.side {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+  background-color: transparent;
+  position: relative;
+  left: 0; /* Initially positioned at the center */
+  opacity: 0; /* Initially invisible */
+}
+
+.side.animate {
+  left: 0; /* Slide to the center */
+  opacity: 1; /* Become visible */
+  transition: opacity 0.5s ease-in-out;
+}
+
+.side:hover {
+  transform: scale(1.1);
+}
+
+.side img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 24px;
+  background-color: #83b94d;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff7043;
+}
+
+#message {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}
+
+#sidesContainer {
+  text-align: center;
+  display: none; /* Initially hidden */
+}
+
+#choose-side {
+  font-size: 24px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  margin-bottom: 20px;
+}

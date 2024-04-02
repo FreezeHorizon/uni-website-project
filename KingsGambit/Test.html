@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Chess Game</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+
+      #board {
+        width: 400px;
+        height: 400px;
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px solid #000;
+      }
+
+      .square {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .black {
+        background-color: #769656;
+      }
+
+      .white {
+        background-color: #eeeed2;
+      }
+
+      .piece {
+        width: 80%;
+        height: 80%;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .highlight {
+        background-color: rgba(255, 255, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="board"></div>
+
+    <script>
+      const board = document.getElementById("board");
+      const squares = [];
+      let currentPiece = null;
+      let currentPlayer = "white";
+
+      window.addEventListener("DOMContentLoaded", (event) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const side = urlParams.get("side");
+        if (side === "black") {
+          // Initialize game with black side's turn
+          initializeGame("black");
+        } else if (side === "white") {
+          // Initialize game with white side's turn
+          initializeGame("white");
+        } else {
+          console.error("Invalid side parameter:", side);
+        }
+      });
+
+      function createBoard() {
+        for (let i = 0; i < 64; i++) {
+          const square = document.createElement("div");
+          square.className = "square";
+          square.dataset.index = i;
+          square.addEventListener("click", handleSquareClick);
+          const isWhiteSquare = (i + Math.floor(i / 8)) % 2 === 0;
+          square.classList.add(isWhiteSquare ? "white" : "black");
+          squares.push(square);
+          board.appendChild(square);
+        }
+      }
+
+      function handleSquareClick(event) {
+        const clickedSquare = event.target;
+        const clickedPiece = clickedSquare.children[0];
+        if (clickedPiece && clickedPiece.dataset.color === currentPlayer) {
+          handlePieceClick(clickedPiece, clickedSquare);
+        } else if (currentPiece) {
+          handleMove(clickedSquare);
+        }
+      }
+
+      function handlePieceClick(piece, square) {
+        currentPiece = piece;
+        highlightPossibleMoves(square);
+      }
+
+      function handleMove(destinationSquare) {
+        const startSquareIndex = parseInt(
+          currentPiece.parentElement.dataset.index
+        );
+        const destinationSquareIndex = parseInt(
+          destinationSquare.dataset.index
+        );
+        const rowDiff = Math.abs(
+          Math.floor(startSquareIndex / 8) -
+            Math.floor(destinationSquareIndex / 8)
+        );
+        const colDiff = Math.abs(
+          (startSquareIndex % 8) - (destinationSquareIndex % 8)
+        );
+        if (
+          isMoveValid(
+            startSquareIndex,
+            destinationSquareIndex,
+            rowDiff,
+            colDiff
+          )
+        ) {
+          movePiece(destinationSquare);
+          currentPlayer = currentPlayer === "white" ? "black" : "white";
+          attachEventListeners(); // Re-attach event listeners after each move
+        }
+      }
+
+      function isMoveValid(startIndex, endIndex, rowDiff, colDiff) {
+        // Implement move validation logic here
+        return true; // Temporary return true
+      }
+
+      function movePiece(destinationSquare) {
+        if (destinationSquare.children.length === 0) {
+          destinationSquare.appendChild(currentPiece);
+        } else {
+          // Capturing logic
+          const capturedPiece = destinationSquare.children[0];
+          // Remove the captured piece
+          destinationSquare.removeChild(capturedPiece);
+          // Move the current piece to the destination square
+          destinationSquare.appendChild(currentPiece);
+        }
+        clearHighlights();
+        currentPiece = null;
+      }
+
+      function highlightPossibleMoves(square) {
+        clearHighlights();
+        // Implement logic to highlight possible moves for the selected piece
+        square.classList.add("highlight");
+      }
+
+      function clearHighlights() {
+        squares.forEach((square) => square.classList.remove("highlight"));
+      }
+
+      function initializeWhitePieces() {
+        const startRow = 1;
+        const backRow = 0;
+        const pieceNumbers = ["01", "02", "03", "04", "05", "03", "02", "01"]; // Piece numbers for the back row
+        for (let i = 0; i < 8; i++) {
+          const pawnIcon = "00"; // White pawn piece number
+          const pawn = createPiece(pawnIcon, "white");
+          squares[startRow * 8 + i].appendChild(pawn);
+
+          const pieceNumber = pieceNumbers[i]; // Get the piece number for the back row
+          const piece = createPiece(pieceNumber, "white");
+          squares[backRow * 8 + i].appendChild(piece);
+        }
+      }
+
+      function initializeBlackPieces() {
+        const startRow = 6;
+        const backRow = 7;
+        const pieceNumbers = ["07", "08", "09", "10", "11", "09", "08", "07"]; // Piece numbers for the back row
+        for (let i = 0; i < 8; i++) {
+          const pawnIcon = "06"; // Black pawn piece number
+          const pawn = createPiece(pawnIcon, "black");
+          squares[startRow * 8 + i].appendChild(pawn);
+
+          const pieceNumber = pieceNumbers[i]; // Get the piece number for the back row
+          const piece = createPiece(pieceNumber, "black");
+          squares[backRow * 8 + i].appendChild(piece);
+        }
+      }
+
+      function createPiece(pieceNumber, color) {
+        let src;
+        switch (pieceNumber) {
+          case "00":
+            src = "./00.png";
+            break;
+          case "01":
+            src = "./01.png";
+            break;
+          case "02":
+            src = "./02.png";
+            break;
+          case "03":
+            src = "./03.png";
+            break;
+          case "04":
+            src = "./04.png";
+            break;
+          case "05":
+            src = "./05.png";
+            break;
+          case "06":
+            src = "./06.png";
+            break;
+          case "07":
+            src = "./07.png";
+            break;
+          case "08":
+            src = "./08.png";
+            break;
+          case "09":
+            src = "./09.png";
+            break;
+          case "10":
+            src = "./10.png";
+            break;
+          case "11":
+            src = "./11.png";
+            break;
+          default:
+            src = "./00.png"; // Provide a default value if necessary
+            break;
+        }
+        const piece = document.createElement("img");
+        piece.src = src;
+        piece.className = "piece";
+        piece.dataset.color = color;
+        return piece;
+      }
+
+      function attachEventListeners() {
+        squares.forEach((square) => {
+          const piece = square.children[0];
+          if (piece) {
+            piece.addEventListener("click", () =>
+              handlePieceClick(piece, square)
+            );
+          }
+        });
+      }
+
+      createBoard();
+      initializeWhitePieces();
+      initializeBlackPieces();
+      attachEventListeners();
+    </script>
+  </body>
+</html>
